@@ -2,7 +2,7 @@ package Kamaitachi;
 use 5.008001;
 use Moose;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use IO::Handle;
 use IO::Socket::INET;
@@ -58,8 +58,8 @@ Kamaitachi - perl flash media server
 
 =head1 SYNOPSIS
 
-use Kamaitachi;
-
+    use Kamaitachi;
+    
     my $kamaitachi = Kamaitachi->new( port => 1935 );
     
     $kamaitachi->register_services(
@@ -200,6 +200,21 @@ Start kamaitachi
 =cut
 
 sub run {
+    my $self = shift;
+
+    Danga::Socket->AddTimer(
+        0,
+        sub {
+            my $poll
+                = $Danga::Socket::HaveKQueue ? 'kqueue'
+                : $Danga::Socket::HaveEpoll  ? 'epoll'
+                :                              'poll';
+            $self->logger->debug(
+                "started kamaitachi port $self->{port} with $poll"
+            );
+        }
+    );
+
     Danga::Socket->EventLoop;
 }
 

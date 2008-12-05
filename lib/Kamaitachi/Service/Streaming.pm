@@ -235,19 +235,23 @@ before on_packet_audio => sub {
 before 'on_close' => sub {
     my ( $self, $session ) = @_;
 
+    my $child_session_name
+        = $self->stream_child_session->[ $session->id ] or return;
+
+    delete $self->stream_info->{$child_session_name}{child}{ $session->id };
+};
+
+after 'on_close' => sub {
+    my ( $self, $session ) = @_;
+
     my $owner_session_name
         = delete $self->stream_owner_session->[ $session->id ];
     my $child_session_name
         = delete $self->stream_child_session->[ $session->id ];
 
     if ($owner_session_name) {
-
         # TODO client notify.
         delete $self->stream_info->{$owner_session_name};
-    }
-    elsif ($child_session_name) {
-        delete $self->stream_info->{$child_session_name}{child}
-            { $session->id };
     }
 };
 
@@ -261,7 +265,7 @@ sub get_stream_info {
     my ( $self, $session_or_name ) = @_;
     $session_or_name = $self->get_stream_name($session_or_name)
         if ref $session_or_name;
-
+    return unless $session_or_name;
     my $stream_info = $self->stream_info->{$session_or_name} or return;
 }
 
