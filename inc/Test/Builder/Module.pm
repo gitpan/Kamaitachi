@@ -1,6 +1,5 @@
 #line 1
 package Test::Builder::Module;
-# $Id: /mirror/googlecode/test-more-trunk/lib/Test/Builder/Module.pm 67223 2008-10-15T03:08:18.888155Z schwern  $
 
 use strict;
 
@@ -9,7 +8,8 @@ use Test::Builder;
 require Exporter;
 our @ISA = qw(Exporter);
 
-our $VERSION = '0.84';
+our $VERSION = '0.92';
+$VERSION = eval $VERSION;      ## no critic (BuiltinFunctions::ProhibitStringyEval)
 
 # 5.004's Exporter doesn't have export_to_level.
 my $_export_to_level = sub {
