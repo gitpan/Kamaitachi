@@ -24,6 +24,7 @@ requires:
   Danga::Socket: 0
   Danga::Socket::Callback: 0
   Data::AMF: 0.02004
+  Filter::Util::Call: 0
   Moose: 0.60
   MooseX::LogDispatch: 0
   Path::Class: 0
@@ -31,4 +32,4 @@ requires:
   perl: 5.008001
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.04
+version: 0.05
